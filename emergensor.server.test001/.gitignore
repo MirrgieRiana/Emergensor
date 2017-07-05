@@ -1,0 +1,9 @@
+*/.settings/
+*/.gradle/
+*/.classpath
+*/bin/
+*/build/
+
+*.lnk
+*/backup/
+mirrg.applications.service.pwi/pwi
