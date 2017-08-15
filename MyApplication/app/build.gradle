@@ -5,8 +5,8 @@ android {
     compileSdkVersion 25
     buildToolsVersion "26.0.0"
     defaultConfig {
-        applicationId "com.example.tacti.myapplication"
-        minSdkVersion 15
+        applicationId "emergensor.sample002.myapplication"
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -40,4 +40,5 @@ dependencies {
 
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.5'
     //compile 'mirrg.lithium:mirrg.lithium.struct:1.0.1'
+    compile 'com.android.support:gridlayout-v7:25.3.1'
 }
