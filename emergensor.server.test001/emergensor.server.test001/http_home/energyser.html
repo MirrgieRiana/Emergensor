@@ -30,14 +30,22 @@ table.layout {
 		<tr id="paneTools" style="height: 0%; display: none;">
 			<td colspan="2">
 				<div id="AppPage">
-					<form id="alertForm" action="#" method="post">
-						<input id="optionalText"
-							placeholder="Write additional description (optional)">
+					<form id="alertForm" action="#" method="post"
+						onsubmit='
+						event.preventDefault();
+						var alertMessage = $("#optionalText");
+						if (view.submit(alertMessage.val())) {
+							alertMessage.val("");
+						}
+						return false;
+					'>
+						<input type="text" id="optionalText"
+							placeholder="Additional description (optional)">
 						<button type="submit">Send Alert</button>
 						<button type="button"
-							onclick="connect(event);event.preventDefault();">Connect</button>
+							onclick="event.preventDefault();view.connect();return false;">Connect</button>
 						<button type="button"
-							onclick="disconnect(event);event.preventDefault();">Disconnect</button>
+							onclick="event.preventDefault();view.disconnect();return false;">Disconnect</button>
 					</form>
 					<div id="updates" style="overflow: scroll; height: 3em;"></div>
 				</div>
@@ -61,6 +69,18 @@ table.layout {
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="app.js"></script>
+	<script>
+		var view = new EmergensorView();
+		$(function() {
+			view.connect();
+		});
+		function initMap() {
+			view.initMap();
+		}
+		view.$map = $('#map');
+		view.$updates = $("#updates");
+		view.$connStatus = $('#connStatus');
+	</script>
 	<script async defer
 		src="https://maps.googleapis.com/maps/api/js?&v=3&key=AIzaSyDN3yjJWAjRgVqdvWvDM-YbUPjlKoJTArk&callback=initMap"></script>
 </body>
