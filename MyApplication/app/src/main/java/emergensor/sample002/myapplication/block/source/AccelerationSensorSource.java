@@ -58,22 +58,22 @@ public class AccelerationSensorSource extends AbstractSensorSource<Message<Vecto
     }
 
     @Override
-    public void initImpl() {
+    protected void initImpl() {
         sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
-    public void stopImpl() {
-        sensorManager.unregisterListener(sensorEventListener);
-    }
-
-    @Override
-    public void startImpl() {
+    protected void startImpl() {
         List<Sensor> sensors = sensorManager.getSensorList(ignoreGravity ? Sensor.TYPE_LINEAR_ACCELERATION : Sensor.TYPE_ACCELEROMETER);
         if (sensors.size() > 0) {
             Sensor sensor = sensors.get(0);
             sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_UI);
         }
+    }
+
+    @Override
+    protected void stopImpl() {
+        sensorManager.unregisterListener(sensorEventListener);
     }
 
 }

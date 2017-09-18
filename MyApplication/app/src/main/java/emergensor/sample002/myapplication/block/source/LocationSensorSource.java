@@ -71,22 +71,22 @@ public class LocationSensorSource extends AbstractSensorSource<Message<Vector<Do
     }
 
     @Override
-    public void initImpl() {
+    protected void initImpl() {
         locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
     }
 
     @Override
-    public void stopImpl() {
-        locationManager.removeUpdates(locationListener);
-    }
-
-    @Override
-    public void startImpl() {
+    protected void startImpl() {
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
+    }
+
+    @Override
+    protected void stopImpl() {
+        locationManager.removeUpdates(locationListener);
     }
 
 }

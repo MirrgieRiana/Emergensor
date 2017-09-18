@@ -1,7 +1,12 @@
 package emergensor.sample002.myapplication;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URL;
 
 import emergensor.sample002.myapplication.block.BlockBuilder;
 import emergensor.sample002.myapplication.block.Message;
@@ -9,7 +14,9 @@ import emergensor.sample002.myapplication.block.drain.SimpleVectorConcatenateDra
 import emergensor.sample002.myapplication.block.filter.BufferFilter;
 import emergensor.sample002.myapplication.block.filter.FunctionFilter;
 import emergensor.sample002.myapplication.block.filter.VectorPeriodicSampleFilter;
+import emergensor.sample002.myapplication.block.sink.URLSenderSink;
 import emergensor.sample002.myapplication.block.source.AccelerationSensorSource;
+import emergensor.sample002.myapplication.block.source.IntervalSource;
 import emergensor.sample002.myapplication.block.source.LocationSensorSource;
 import emergensor.sample002.myapplication.functions.ComplexAbstractFunction;
 import emergensor.sample002.myapplication.functions.FFTFunction;
@@ -31,10 +38,14 @@ public class MainActivity extends AppCompatActivity {
 
     private UI ui;
 
+    private IntervalSource intervalSource;
     private LocationSensorSource locationSensorSource;
     private AccelerationSensorSource accelerationSensorSource;
 
+    private double userId = Math.random();
+    private double[] location = null;
     private String locationText = "undefined";
+    private boolean allowAlert = false;
     private int index = 0;
 
     @Override
@@ -45,10 +56,42 @@ public class MainActivity extends AppCompatActivity {
         try {
 
             ui = new UI(this, "http://203.178.135.114:7030/", 500);
+            intervalSource = build(new IntervalSource(10 * 1000))
+                    .add(new Consumer<Message<Long>>() {
+                        final URLSenderSink urlSenderSink = new URLSenderSink(
+                                "a",
+                                "gp-^45:w3v9]332c",
+                                new URL("http://203.178.135.114:7030/__api/send/alert"));
+
+                        @Override
+                        public void accept(Message<Long> m) {
+                            if (allowAlert) {
+                                if (location != null) {
+                                    try {
+                                        String string = String.format("{userId:\"%s\",lat:\"%f\",lng:\"%f\",text:\"App\"}",
+                                                userId,
+                                                location[0],
+                                                location[1]);
+                                        urlSenderSink.accept(string);
+                                    } catch (Throwable e) {
+                                        StringWriter out = new StringWriter();
+                                        e.printStackTrace(new PrintWriter(out));
+                                        new AlertDialog.Builder(MainActivity.this)
+                                                .setTitle("title")
+                                                .setMessage(out.toString())
+                                                .setPositiveButton("OK", null)
+                                                .show();
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    .get();
             locationSensorSource = build(new LocationSensorSource(this))
                     .add(new Consumer<Message<Vector<Double>>>() {
                         @Override
                         public void accept(Message<Vector<Double>> m) {
+                            location = new double[]{m.value.get(0), m.value.get(1)};
                             locationText = "" + m.value.get(0) + " / " + m.value.get(1);
                             ui.setText(locationText);
                         }
@@ -56,9 +99,32 @@ public class MainActivity extends AppCompatActivity {
                     .get();
             final SimpleVectorConcatenateDrain<Double> drain = build(new SimpleVectorConcatenateDrain<Double>(6))
                     .add(new Consumer<Message<Vector<Double>>>() {
+                        private Thread thread;
+
                         @Override
                         public void accept(Message<Vector<Double>> m) {
-                            ui.setText2(classify(m.value.get(0), m.value.get(1), m.value.get(2), m.value.get(3), m.value.get(4), m.value.get(5)).name());
+                            EnumState state = classify(m.value.get(0), m.value.get(1), m.value.get(2), m.value.get(3), m.value.get(4), m.value.get(5));
+
+                            if (state == EnumState.RUN) {
+                                allowAlert = true;
+
+                                // タイマリセット
+                                if (thread != null) thread.interrupt();
+                                thread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(60 * 1000);
+                                        } catch (InterruptedException e) {
+                                            return;
+                                        }
+                                        allowAlert = false;
+                                    }
+                                });
+                                thread.start();
+                            }
+
+                            ui.setText2(state.name());
                             ui.setEntry2(index,
                                     (float) (double) m.value.get(0),
                                     (float) (double) m.value.get(1),
@@ -116,21 +182,6 @@ public class MainActivity extends AppCompatActivity {
                                                             .add(drain.createDrain(5)))))))
                     .get();
 
-            /*
-                                    .add(build(new SprintingDetectorFilter(1 * 1000, 10))
-                                            .add(new Consumer<Long>() {
-                                                final URLSenderSink urlSenderSink = new URLSenderSink(
-                                                        "a",
-                                                        "gp-^45:w3v9]332c",
-                                                        new URL("http://203.178.135.114:7030/send"));
-
-                                                @Override
-                                                public void accept(Long timestamp) {
-                                                    urlSenderSink.accept(locationText);
-                                                }
-                                            })))
-             */
-
             // pre init
             {
                 ui.preInit();
@@ -141,9 +192,11 @@ public class MainActivity extends AppCompatActivity {
                 if (!locationSensorSource.checkPermission()) return;
                 if (!accelerationSensorSource.checkPermission()) return;
 
+                intervalSource.init();
                 locationSensorSource.init();
                 accelerationSensorSource.init();
 
+                intervalSource.start();
                 locationSensorSource.start();
                 accelerationSensorSource.start();
 
@@ -168,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        intervalSource.stop();
         locationSensorSource.stop();
         accelerationSensorSource.stop();
     }
@@ -176,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        intervalSource.start();
         locationSensorSource.start();
         accelerationSensorSource.start();
     }
