@@ -43,11 +43,23 @@ table.layout {
 							placeholder="Additional description (optional)">
 						<button type="submit">Send Alert</button>
 						<button type="button"
-							onclick="event.preventDefault();view.connect();return false;">Connect</button>
+							onclick='
+								event.preventDefault();
+								view.connect();
+								return false;
+							'>Connect</button>
 						<button type="button"
-							onclick="event.preventDefault();view.disconnect();return false;">Disconnect</button>
+							onclick='
+								event.preventDefault();
+								view.disconnect();
+								return false;
+							'>Disconnect</button>
+						<label><input type="checkbox"
+							onclick='
+								view.debug = $(this).prop("checked");
+							'>Debug</label>
 					</form>
-					<div id="updates" style="overflow: scroll; height: 3em;"></div>
+					<div id="updates" style="overflow: scroll; height: 5em;"></div>
 				</div>
 			</td>
 		</tr>
@@ -68,20 +80,20 @@ table.layout {
 	</table>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="app.js"></script>
 	<script>
 		var view = new EmergensorView();
-		$(function() {
-			view.connect();
-		});
 		function initMap() {
 			view.initMap();
+			view.connect();
 		}
 		view.$map = $('#map');
 		view.$updates = $("#updates");
 		view.$connStatus = $('#connStatus');
 	</script>
-	<script async defer
-		src="https://maps.googleapis.com/maps/api/js?&v=3&key=AIzaSyDN3yjJWAjRgVqdvWvDM-YbUPjlKoJTArk&callback=initMap"></script>
+	<script
+		src="https://maps.googleapis.com/maps/api/js?&v=3&key=AIzaSyDN3yjJWAjRgVqdvWvDM-YbUPjlKoJTArk&callback=initMap&libraries=geometry"></script>
 </body>
 </html>
