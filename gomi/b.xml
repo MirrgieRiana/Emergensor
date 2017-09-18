@@ -1,0 +1,30 @@
+<weka.core.Attribute>
+          <m__Name>mean</m__Name>
+          <m__Type>0</m__Type>
+          <m__Index>0</m__Index>
+          <m__Metadata serialization="custom">
+            <unserializable-parents/>
+            <hashtable>
+              <default>
+                <loadFactor>0.75</loadFactor>
+                <threshold>8</threshold>
+              </default>
+              <int>11</int>
+              <int>0</int>
+            </hashtable>
+            <weka.core.ProtectedProperties>
+              <default>
+                <closed>true</closed>
+              </default>
+            </weka.core.ProtectedProperties>
+          </m__Metadata>
+          <m__Ordering>1</m__Ordering>
+          <m__IsRegular>true</m__IsRegular>
+          <m__IsAveragable>true</m__IsAveragable>
+          <m__HasZeropoint>true</m__HasZeropoint>
+          <m__Weight>1.0</m__Weight>
+          <m__LowerBound>-Infinity</m__LowerBound>
+          <m__LowerBoundIsOpen>false</m__LowerBoundIsOpen>
+          <m__UpperBound>Infinity</m__UpperBound>
+          <m__UpperBoundIsOpen>false</m__UpperBoundIsOpen>
+        </weka.core.Attribute>
