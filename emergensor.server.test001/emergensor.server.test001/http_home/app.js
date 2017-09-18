@@ -212,8 +212,8 @@ EmergensorView.prototype.initMap = function() {
 
 	this.map = new google.maps.Map(this.$map[0], {
 		center : {
-			lat : -34.397,
-			lng : 150.644
+			lat : 35.70923054243309,
+			lng : 139.76082175970078
 		},
 		zoom : 17
 	});
