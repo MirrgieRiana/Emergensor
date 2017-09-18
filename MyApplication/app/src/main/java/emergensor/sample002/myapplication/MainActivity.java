@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     .add(new Consumer<Message<Vector<Double>>>() {
                         @Override
                         public void accept(Message<Vector<Double>> m) {
-                            ui.setText2(tree(m.value.get(0), m.value.get(1), m.value.get(2), m.value.get(3), m.value.get(4), m.value.get(5)).name());
+                            ui.setText2(classify(m.value.get(0), m.value.get(1), m.value.get(2), m.value.get(3), m.value.get(4), m.value.get(5)).name());
                             ui.setEntry2(index,
                                     (float) (double) m.value.get(0),
                                     (float) (double) m.value.get(1),
@@ -68,27 +68,11 @@ public class MainActivity extends AppCompatActivity {
                                     (float) (double) m.value.get(5) * 0.1f);
                         }
 
-                        private EnumState tree(double mean, double variance, double e8, double e16, double e32, double e64) {
-                            if (variance <= 1.552883) {
-                                if (mean <= 1.35028) {
-                                    return EnumState.OTHER;
-                                } else {
-                                    if (e32 <= 8.168214) {
-                                        return EnumState.OTHER;
-                                    } else {
-                                        if (variance <= 0.238747) {
-                                            return EnumState.RUN;
-                                        } else {
-                                            if (e8 <= 81.111556) {
-                                                return EnumState.OTHER;
-                                            } else {
-                                                return EnumState.RUN;
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                return EnumState.RUN;
+                        private EnumState classify(Double... args) {
+                            try {
+                                return EnumState.values()[(int) Tree.classify(args)];
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
                             }
                         }
                     })
@@ -197,8 +181,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static enum EnumState {
-        OTHER,
         RUN,
+        OTHER,
     }
 
     private <I, O> BlockBuilder<FunctionFilter<Message<I>, Message<O>>, Message<O>> bfm
