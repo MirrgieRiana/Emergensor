@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
+  <info organisation="emergensor" module="emergensor.server.test001" revision="0.0.2" status="integration" publication="20170919073730">
+    <description/>
+  </info>
+  <configurations>
+    <conf name="archives" visibility="public" description="Configuration for archive artifacts."/>
+    <conf name="compile" visibility="private" description="Compile classpath for source set 'main'."/>
+    <conf name="default" visibility="public" description="Configuration for default artifacts." extends="runtime"/>
+    <conf name="runtime" visibility="private" description="Runtime classpath for source set 'main'." extends="compile"/>
+    <conf name="testCompile" visibility="private" description="Compile classpath for source set 'test'." extends="compile"/>
+    <conf name="testRuntime" visibility="private" description="Runtime classpath for source set 'test'." extends="runtime,testCompile"/>
+  </configurations>
+  <publications>
+    <artifact name="emergensor.server.test001" type="jar" ext="jar" conf="archives,runtime"/>
+    <artifact name="emergensor.server.test001" type="jar" ext="jar" conf="archives" m:classifier="sources"/>
+    <artifact name="emergensor.server.test001" type="jar" ext="jar" conf="archives" m:classifier="javadoc"/>
+  </publications>
+  <dependencies>
+    <dependency org="org.java-websocket" name="Java-WebSocket" rev="1.3.+" conf="compile-&gt;default"/>
+    <dependency org="org.codehaus.groovy" name="groovy-all" rev="2.4.+" conf="compile-&gt;default"/>
+    <dependency org="net.arnx" name="jsonic" rev="1.3.10" conf="compile-&gt;default"/>
+    <dependency org="mirrg.lithium" name="mirrg.lithium.struct" rev="2.1+" conf="compile-&gt;default"/>
+    <dependency org="mirrg.lithium" name="mirrg.lithium.lang" rev="1.0+" conf="compile-&gt;default"/>
+    <dependency org="mirrg.lithium" name="mirrg.lithium.cgi" rev="3.0+" conf="compile-&gt;default"/>
+    <dependency org="mirrg.lithium" name="mirrg.lithium.event" rev="2.0+" conf="compile-&gt;default"/>
+    <dependency org="junit" name="junit" rev="4.+" conf="testCompile-&gt;default"/>
+  </dependencies>
+</ivy-module>
