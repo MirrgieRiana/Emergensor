@@ -1,5 +1,5 @@
 package emergensor.server.test001;
-
+/*
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 import mirrg.lithium.properties.HPropertiesParser;
-import mirrg.lithium.properties.Properties;
+import mirrg.lithium.properties.IProperties;
 import mirrg.lithium.struct.Tuple;
 
 public class Server
@@ -25,15 +25,15 @@ public class Server
 
 	public static void main(String[] args) throws Exception
 	{
-		Properties properties = HPropertiesParser.parse(new File("emergensor.properties"), e -> {
+		IProperties properties = HPropertiesParser.parse(new File("emergensor.properties"), e -> {
 			throw new RuntimeException(e);
 		});
 
 		HttpServer httpServer = HttpServer.create();
 		httpServer.bind(new InetSocketAddress(
-			properties.getString("host").get(),
-			properties.getInteger("port").get()),
-			properties.getInteger("backlog").get());
+			properties.get("host").getString().get(),
+			properties.get("port").getInteger().get()),
+			properties.get("backlog").getInteger().get());
 
 		httpServer.createContext("/send", e -> {
 
@@ -56,8 +56,8 @@ public class Server
 			@Override
 			public boolean checkCredentials(String arg0, String arg1)
 			{
-				if (arg0.equals(properties.getString("username").get())) {
-					if (arg1.equals(properties.getString("password").get())) {
+				if (arg0.equals(properties.get("username").getString().get())) {
+					if (arg1.equals(properties.get("password").getString().get())) {
 						return true;
 					}
 				}
@@ -155,3 +155,4 @@ public class Server
 	}
 
 }
+*/
