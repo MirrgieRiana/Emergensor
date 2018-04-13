@@ -100,10 +100,10 @@ EmergensorView.prototype.addMarker = function(markerEntry) {
 
 		view.markerEntries.push(markerEntry);
 
-		try{
-		var name = JSON.parse(markerEntry.userName).name;
-		toastr["warning"](name + "が走っています！", "注意！");
-		}catch(e){
+		try {
+			var name = JSON.parse(markerEntry.userName)[1];
+			toastr["warning"](name + "が走っています！", "注意！");
+		} catch (e) {
 
 		}
 
