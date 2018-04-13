@@ -49,6 +49,7 @@ public class Emergensor
 		Marker marker = new Marker(
 			markerIdNext,
 			identifierTable.get(identifier),
+			""+ identifier,
 			Instant.now().toEpochMilli(),
 			alert.text,
 			alert.lat,

@@ -5,6 +5,7 @@ public class Marker
 
 	public int markerId;
 	public int userId;
+	public String userName;
 	public long time;
 	public String text;
 	public double lat;
@@ -15,10 +16,11 @@ public class Marker
 
 	}
 
-	public Marker(int markerId, int userId, long time, String text, double lat, double lon)
+	public Marker(int markerId, int userId, String userName, long time, String text, double lat, double lon)
 	{
 		this.markerId = markerId;
 		this.userId = userId;
+		this.userName = userName;
 		this.time = time;
 		this.text = text;
 		this.lat = lat;
