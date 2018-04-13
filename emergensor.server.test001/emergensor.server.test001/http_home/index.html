@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <title>Mobile Alert App</title>
+<link href="toastr.css" rel="stylesheet" />
 <style>
 html, body {
 	height: 100%;
@@ -58,7 +59,7 @@ table.layout {
 							onclick='
 								view.debug = $(this).prop("checked");
 							'>Debug</label>
-							<a href="/app-debug.apk">Download App</a>
+						<a href="/app-debug.apk">Download App</a>
 					</form>
 					<div id="updates" style="overflow: scroll; height: 5em;"></div>
 				</div>
@@ -81,6 +82,7 @@ table.layout {
 	</table>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="toastr.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="app.js"></script>
@@ -93,6 +95,27 @@ table.layout {
 		view.$map = $('#map');
 		view.$updates = $("#updates");
 		view.$connStatus = $('#connStatus');
+	</script>
+	<script>
+		$(function() {
+			toastr.options = {
+				"closeButton" : false,
+				"debug" : false,
+				"newestOnTop" : false,
+				"progressBar" : false,
+				"positionClass" : "toast-top-right",
+				"preventDuplicates" : false,
+				"onclick" : null,
+				"showDuration" : "300",
+				"hideDuration" : "1000",
+				"timeOut" : "5000",
+				"extendedTimeOut" : "1000",
+				"showEasing" : "swing",
+				"hideEasing" : "linear",
+				"showMethod" : "fadeIn",
+				"hideMethod" : "fadeOut"
+			}
+		});
 	</script>
 	<script
 		src="https://maps.googleapis.com/maps/api/js?&v=3&key=AIzaSyDN3yjJWAjRgVqdvWvDM-YbUPjlKoJTArk&callback=initMap&libraries=geometry"></script>
