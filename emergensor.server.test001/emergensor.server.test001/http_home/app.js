@@ -100,6 +100,13 @@ EmergensorView.prototype.addMarker = function(markerEntry) {
 
 		view.markerEntries.push(markerEntry);
 
+		try{
+		var name = JSON.parse(markerEntry.userName).name;
+		toastr["warning"](name + "が走っています！", "注意！");
+		}catch(e){
+
+		}
+
 		// make marker
 		markerEntry.marker = new google.maps.Marker({
 			position : markerEntry.latLng,
